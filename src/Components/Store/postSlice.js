@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  data: null,
+  data: [],
   loading: true,
   error: null,
 };
@@ -34,7 +34,7 @@ const postSlice = createSlice({
 });
 export const {
   fetchPostRequest,
-  fetchPostfailure,
+   fetchPostfailure,
   fetchPostSuccess,
   removePost,
 } = postSlice.actions;

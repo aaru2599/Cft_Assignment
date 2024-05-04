@@ -3,11 +3,9 @@ import useAPI from "../Hooks/UseApi";
 import Pagination from "../Pagination/Pagination";
 import PostCard from "../Atoms/PostCard";
 import { useDispatch, useSelector } from "react-redux";
-import { removePost } from "../Store/postSlice";
 
 const PageSection = () => {
   const dispatch = useDispatch();
-
   const [currentPage, setCurrentPage] = useState(1);
   const [post, setPost] = useState([]);
   const postPerPage = 6;
@@ -17,12 +15,14 @@ const PageSection = () => {
 
   const postData = useSelector((state) => state.post.data) || [];
   console.log("postdata", postData);
+
   useEffect(() => {
     if (data) {
       setPost(data);
     }
   }, [data]);
-  //pagination Logic
+
+  // Pagination Logic...
   const indexOfLastPost = currentPage * postPerPage;
   const indexOfFirstPost = indexOfLastPost - postPerPage;
   const currentPost = post.slice(indexOfFirstPost, indexOfLastPost);
@@ -34,17 +34,22 @@ const PageSection = () => {
     const updtatePosts = post.filter((post) => post.id !== id);
     setPost(updtatePosts);
   };
+
   return (
     <div className="flex flex-col gap-5">
-      <div className="grid grid-cols-3 gap-3">
-        {currentPost.map((item) => {
-          return (
-            <div key={item.id}>
-              <PostCard data={item} handlePostRemove={handlePostRemove} />
-            </div>
-          );
-        })}
-      </div>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <div className="grid grid-cols-3 gap-3">
+          {currentPost.map((item) => {
+            return (
+              <div key={item.id}>
+                <PostCard data={item} handlePostRemove={handlePostRemove} />
+              </div>
+            );
+          })}
+        </div>
+      )}
       <div>
         <Pagination
           postPerPage={postPerPage}
@@ -56,4 +61,5 @@ const PageSection = () => {
     </div>
   );
 };
+
 export default PageSection;

@@ -1,19 +1,21 @@
-//Custome hook for calling an api
-
 import { useEffect, useState } from "react";
 
-const useAPI = (url ) => {
+const useAPI = (url, delay = 5000) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const responce = await fetch(url);
-        if (!responce.ok) {
-          throw new Error("Network Responce Error");
+        // Introduce a delay before fetching data
+        await new Promise(resolve => setTimeout(resolve, delay));
+
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error("Network Response Error");
         }
-        const result = await responce.json();
+        const result = await response.json();
         setData(result);
       } catch (error) {
         setError(error);
@@ -21,11 +23,15 @@ const useAPI = (url ) => {
         setLoading(false);
       }
     };
+
     fetchData();
+
     return () => {
-      // CleanUp function
+      // Cleanup function
     };
-  }, [url]);
+  }, [url, delay]);
+
   return { data, loading, error };
 };
+
 export default useAPI;
