@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useAPI from "../Hooks/UseApi";
 import Pagination from "../Pagination/Pagination";
 import PostCard from "../Atoms/PostCard";
@@ -9,32 +9,38 @@ const PageSection = () => {
   const dispatch = useDispatch();
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [post, setPost] = useState([]);
   const postPerPage = 6;
 
   const apiData = useAPI("https://jsonplaceholder.typicode.com/posts");
   const { data, loading, error } = apiData;
-  
-  const postData=useSelector(state=>state.post.data)||[];
-  console.log("postdata",postData);
 
+  const postData = useSelector((state) => state.post.data) || [];
+  console.log("postdata", postData);
+  useEffect(() => {
+    if (data) {
+      setPost(data);
+    }
+  }, [data]);
   //pagination Logic
   const indexOfLastPost = currentPage * postPerPage;
   const indexOfFirstPost = indexOfLastPost - postPerPage;
-  const currentPost = data.slice(indexOfFirstPost, indexOfLastPost);
+  const currentPost = post.slice(indexOfFirstPost, indexOfLastPost);
   console.log("currentPost", currentPost);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  const handlePostRemove=(id)=>{
-
-  }
+  const handlePostRemove = (id) => {
+    const updtatePosts = post.filter((post) => post.id !== id);
+    setPost(updtatePosts);
+  };
   return (
     <div className="flex flex-col gap-5">
       <div className="grid grid-cols-3 gap-3">
         {currentPost.map((item) => {
           return (
             <div key={item.id}>
-              <PostCard  data={item} handlePostRemove={handlePostRemove} />
+              <PostCard data={item} handlePostRemove={handlePostRemove} />
             </div>
           );
         })}
