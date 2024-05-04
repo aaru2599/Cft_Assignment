@@ -1,9 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import useAPI from "../Hooks/UseApi";
 
 const initialState = {
-  data: [],
-  loading: false,
+  data: null,
+  loading: true,
   error: null,
 };
 const postSlice = createSlice({
@@ -12,22 +11,25 @@ const postSlice = createSlice({
   reducers: {
     fetchPostRequest: (state) => {
       state.loading = true;
-      state.error = null;
+    //   state.error = null;
     },
     fetchPostSuccess: (state, action) => {
       state.loading = false;
-      state.data = action.payload;
-      console.log("state.data",state.data);
+      state.data = action.payload.result;
+      console.log(state.data);
+      //   console.log("state.data", action.payload);
     },
-    fetchPostfailure: (state, action) => {
+    fetchPostfailure: (state) => {
       state.loading = false;
-      state.error = action.payload;
+      state.data = [];
+
+      //   state.error = action.payload;
     },
 
-    removePost: (state, action) => {
-      state.data = state.data.filter((post) => post.id !== action.payload);
-      console.log(state.data);
-    },
+    // removePost: (state, action) => {
+    //   state.data = state.data.filter((post) => post.id !== action.payload);
+    //   console.log(state.data);
+    // },
   },
 });
 export const {
@@ -37,20 +39,4 @@ export const {
   removePost,
 } = postSlice.actions;
 
-export const fetchPostData = () => async (dispatch) => {
-  try {
-    dispatch(fetchPostRequest());
-    const { data, loading, error } = useAPI(
-      "https://jsonplaceholder.typicode.com/posts"
-    );
-    console.log("data",data);
-    if (!loading && !error) {
-      dispatch(fetchPostSuccess(data));
-    } else {
-      dispatch(fetchPostfailure(error));
-    }
-  } catch (err) {
-    dispatch(fetchPostfailure(err.message));
-  }
-};
 export default postSlice.reducer;

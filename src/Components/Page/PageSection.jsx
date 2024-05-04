@@ -13,8 +13,9 @@ const PageSection = () => {
 
   const apiData = useAPI("https://jsonplaceholder.typicode.com/posts");
   const { data, loading, error } = apiData;
-  const post=useSelector(state=>state);
-  console.log("post",post);
+  
+  const postData=useSelector(state=>state.post)||[];
+  console.log("postdata",postData);
 
   //pagination Logic
   const indexOfLastPost = currentPage * postPerPage;
