@@ -1,25 +1,19 @@
 import { put, takeLatest } from "redux-saga/effects";
-import { fetchPostSuccess, fetchPostfailure } from "./postSlice";
+import { fetchPostRequest, fetchPostSuccess, fetchPostfailure } from "./postSlice";
 
-const getRequest = () => async (url) => {
-  try {
-    const responce = await fetch(url);
-    const parsedResponce = await responce.json();
-    return parsedResponce;
-  } catch (err) {
-    return null;
-  }
-};
+
 
 export function* getPost(){
     try{
-        const productResponce=yield getRequest("https://jsonplaceholder.typicode.com/posts")||[]
+        const productResponce=yield fetch("https://jsonplaceholder.typicode.com/posts")||[]
         console.log("productResponce",productResponce);
-        if(!productResponce){
+
+        const data=yield productResponce.json
+        if(!data){
             yield put(fetchPostfailure());
             return ;
         }
-        yield put(fetchPostSuccess({result:productResponce}));
+        yield put(fetchPostSuccess({result:data}));
     }
     catch(err){
         yield put(fetchPostfailure)
@@ -27,5 +21,5 @@ export function* getPost(){
 
 }
 export function* watchFetchPost(){
-    yield takeLatest(getPost,getPost)
+    yield takeLatest(fetchPostRequest.type,getPost)
 }

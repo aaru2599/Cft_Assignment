@@ -7,7 +7,7 @@ export const store = configureStore({
   reducer: {
     post: postReducer,
   },
-  middleware:(current)=>current({thunk:false}).concat(sagaMiddleware)
+  middleware:(current)=>current().concat(sagaMiddleware)
 });
 sagaMiddleware.run(rootSaga)
 

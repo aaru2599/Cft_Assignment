@@ -14,7 +14,7 @@ const PageSection = () => {
   const apiData = useAPI("https://jsonplaceholder.typicode.com/posts");
   const { data, loading, error } = apiData;
   
-  const postData=useSelector(state=>state.post)||[];
+  const postData=useSelector(state=>state.post.data)||[];
   console.log("postdata",postData);
 
   //pagination Logic
@@ -25,14 +25,16 @@ const PageSection = () => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  
+  const handlePostRemove=(id)=>{
+
+  }
   return (
     <div className="flex flex-col gap-5">
       <div className="grid grid-cols-3 gap-3">
         {currentPost.map((item) => {
           return (
             <div key={item.id}>
-              <PostCard  data={item}  />
+              <PostCard  data={item} handlePostRemove={handlePostRemove} />
             </div>
           );
         })}
