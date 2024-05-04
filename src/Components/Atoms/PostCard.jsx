@@ -1,7 +1,10 @@
 import { AiOutlineClose } from "react-icons/ai";
+import { useDispatch } from "react-redux";
+import { removePost } from "../Store/postSlice";
 
 const PostCard = ({ data,handlePostRemove }) => {
   const { body, userId, id, title } = data;
+  const dispatch=useDispatch()
   
   return (
     <div className="relative flex p-4 flex-col justify-between w-[250px] h-[250px] border">

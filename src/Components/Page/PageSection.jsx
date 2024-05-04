@@ -2,7 +2,7 @@ import { useState } from "react";
 import useAPI from "../Hooks/UseApi";
 import Pagination from "../Pagination/Pagination";
 import PostCard from "../Atoms/PostCard";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { removePost } from "../Store/postSlice";
 
 const PageSection = () => {
@@ -13,6 +13,8 @@ const PageSection = () => {
 
   const apiData = useAPI("https://jsonplaceholder.typicode.com/posts");
   const { data, loading, error } = apiData;
+  const post=useSelector(state=>state);
+  console.log("post",post);
 
   //pagination Logic
   const indexOfLastPost = currentPage * postPerPage;
@@ -22,16 +24,14 @@ const PageSection = () => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  const handlePostRemove = (id) => {
-    dispatch(removePost(id));
-  };
+  
   return (
     <div className="flex flex-col gap-5">
       <div className="grid grid-cols-3 gap-3">
         {currentPost.map((item) => {
           return (
             <div key={item.id}>
-              <PostCard  data={item} handlePostRemove={handlePostRemove} />
+              <PostCard  data={item}  />
             </div>
           );
         })}
